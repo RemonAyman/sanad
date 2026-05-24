@@ -96,6 +96,8 @@ export default function AdminDashboard() {
         snap.forEach((d) => reps.push({ id: d.id, ...d.data() }));
         reps.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
         setReports(reps);
+      }, (err) => {
+        console.warn("Firestore reports permission denied (check security rules):", err);
       });
 
       // Listen to Bookings
@@ -104,6 +106,8 @@ export default function AdminDashboard() {
         snap.forEach((d) => books.push({ id: d.id, ...d.data() }));
         books.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
         setBookings(books);
+      }, (err) => {
+        console.warn("Firestore bookings permission denied (check security rules):", err);
       });
 
       // Listen to Talents
@@ -112,6 +116,8 @@ export default function AdminDashboard() {
         snap.forEach((d) => tals.push({ id: d.id, ...d.data() }));
         tals.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
         setTalents(tals);
+      }, (err) => {
+        console.warn("Firestore talents permission denied (check security rules):", err);
       });
 
       // Listen to Videos
@@ -119,6 +125,8 @@ export default function AdminDashboard() {
         const vids: any[] = [];
         snap.forEach((d) => vids.push({ id: d.id, ...d.data() }));
         setVideos(vids);
+      }, (err) => {
+        console.warn("Firestore videos permission denied (check security rules):", err);
       });
 
       // Listen to Messages to map active users list
@@ -143,6 +151,8 @@ export default function AdminDashboard() {
           (a: any, b: any) => (b.lastTime?.seconds || 0) - (a.lastTime?.seconds || 0)
         );
         setChatUsers(sortedChatUsers);
+      }, (err) => {
+        console.warn("Firestore messages list permission denied (check security rules):", err);
       });
 
       setDbLoading(false);
@@ -170,8 +180,10 @@ export default function AdminDashboard() {
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const msgs: any[] = [];
       snapshot.forEach((d) => msgs.push({ id: d.id, ...d.data() }));
-      msgs.sort((a, b) => (a.createdAt?.seconds || 0) - (b.createdAt?.seconds || 0));
+      msgs.sort((a, b) => (a.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
       setActiveChatMessages(msgs);
+    }, (err) => {
+      console.warn("Firestore active chat messages permission denied (check security rules):", err);
     });
 
     return () => unsubscribe();

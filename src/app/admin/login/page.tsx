@@ -113,7 +113,7 @@ export default function AdminLoginPage() {
               </label>
               <input
                 type="email"
-                placeholder="admin@gmail.com"
+                placeholder="admin@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="px-4 py-3 bg-gray-50 border-3 border-gray-200 hover:border-gray-800 focus:border-gray-800 focus:outline-none rounded-2xl font-bold text-sm text-left dir-ltr"
@@ -128,7 +128,7 @@ export default function AdminLoginPage() {
               </label>
               <input
                 type="password"
-                placeholder="admin123"
+                placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="px-4 py-3 bg-gray-50 border-3 border-gray-200 hover:border-gray-800 focus:border-gray-800 focus:outline-none rounded-2xl font-bold text-sm text-left dir-ltr"

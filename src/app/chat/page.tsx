@@ -69,6 +69,9 @@ export default function ChatPage() {
       setMessages(msgs);
       setChatLoading(false);
       setTimeout(scrollToBottom, 100);
+    }, (error) => {
+      console.warn("Firestore messages subscription permission denied (check security rules):", error);
+      setChatLoading(false);
     });
 
     return () => unsubscribe();
