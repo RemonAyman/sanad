@@ -283,6 +283,10 @@ export default function AdminDashboard() {
     }
   };
 
+  const isDirectVideoUrl = (value: string) => {
+    return /\.(mp4|webm|ogg|mov|m3u8)(\?|$)/i.test(value.trim());
+  };
+
   // 6. Educational Videos CRUD
   const handleAddVideo = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -306,7 +310,7 @@ export default function AdminDashboard() {
         category: newVideoCategory,
         description: newVideoDescription.trim(),
         youtubeId: youtubeId || "",
-        videoUrl: youtubeId ? "" : rawSource,
+        videoUrl: youtubeId ? "" : isDirectVideoUrl(rawSource) ? rawSource : "",
         sourceUrl: rawSource,
         createdAt: new Date(),
       });
