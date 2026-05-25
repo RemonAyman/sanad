@@ -785,12 +785,15 @@ export default function AdminDashboard() {
                       <label className="font-extrabold text-xs text-gray-600">رابط الفيديو أو معرف YouTube:</label>
                       <input
                         type="text"
-                        placeholder="مثال: https://www.youtube.com/watch?v=pew8c2Z19l0 أو pew8c2Z19l0"
+                        placeholder="مثال: https://www.youtube.com/watch?v=pew8c2Z19l0 أو https://www.facebook.com/video... أو https://www.tiktok.com/..."
                         value={newVideoSourceUrl}
                         onChange={(e) => setNewVideoSourceUrl(e.target.value)}
                         className="px-3 py-2 bg-white border border-gray-300 rounded-xl font-bold text-xs text-left dir-ltr"
                         required
                       />
+                      <p className="text-[10px] text-gray-500 mt-1">
+                        يمكن إضافة رابط YouTube أو Facebook أو TikTok أو رابط فيديو مباشر، وسيُخزن في قاعدة البيانات ليعرضه الموقع.
+                      </p>
                     </div>
 
                     <div className="flex flex-col gap-1.5 sm:col-span-4">

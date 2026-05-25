@@ -201,18 +201,18 @@ export default function VideosPage() {
                     autoPlay
                     playsInline
                   />
-                ) : selectedVideo.sourceUrl ? (
-                  <iframe
-                    className="w-full h-full"
-                    src={selectedVideo.sourceUrl}
-                    title={selectedVideo.title}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  ></iframe>
                 ) : selectedVideo.youtubeId ? (
                   <iframe
                     className="w-full h-full"
                     src={`https://www.youtube.com/embed/${selectedVideo.youtubeId}?autoplay=1&rel=0`}
+                    title={selectedVideo.title}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  ></iframe>
+                ) : selectedVideo.sourceUrl ? (
+                  <iframe
+                    className="w-full h-full"
+                    src={selectedVideo.sourceUrl}
                     title={selectedVideo.title}
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
