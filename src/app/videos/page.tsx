@@ -24,50 +24,6 @@ export default function VideosPage() {
   const [loading, setLoading] = useState(true);
   const [selectedVideo, setSelectedVideo] = useState<VideoItem | null>(null);
 
-  // Curated educational seed videos (fallback and defaults)
-  const seedVideos: VideoItem[] = [
-    {
-      id: "seed-1",
-      title: "التنمر المدرسي: كيف نتعامل معه بذكاء وشجاعة؟ 🛡️",
-      videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-      thumbnailUrl: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=800&q=80",
-      category: "anti-bullying",
-      description: "فيديو مسلي قصته في الرسم يساعد الأطفال على فهم التمييز وكيف يمكن أن نكون دعماً لبعضنا بطريقة لطيفة.",
-    },
-    {
-      id: "seed-2",
-      title: "قصة عن الثقة بالنفس للأطفال: أنت رائع كما أنت! 🌟",
-      videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
-      thumbnailUrl: "https://images.unsplash.com/photo-1517487881594-2787fef5ebf7?auto=format&fit=crop&w=800&q=80",
-      category: "confidence",
-      description: "فيديو تعليمي يساعد الطفل على أن يثق في نفسه ويتقبل قدراته ويكمل رحلة التعلم بشجاعة.",
-    },
-    {
-      id: "seed-3",
-      title: "ما هو الاحترام المتبادل؟ قصص تربوية هادفة 🤝",
-      videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
-      thumbnailUrl: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=80",
-      category: "respect",
-      description: "فيديو قصير يعلم الطفل كيفية احترام نفسه والآخرين وكيف يبني علاقتها بالمحيط بحب وهدوء.",
-    },
-    {
-      id: "seed-4",
-      title: "التحكم في الغضب: كيف أهدأ عندما أشعر بالانزعاج؟ 🕊️",
-      videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
-      thumbnailUrl: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=80",
-      category: "anger-control",
-      description: "فيديو يساعد الأطفال على التعرف لطريقة التنفس والهدوء حتى لا يسيطر عليهم الغضب فجأة.",
-    },
-    {
-      id: "seed-5",
-      title: "سر الصداقة الحقيقية: كيف أصنع أصدقاء أوفياء؟ 🧸",
-      videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
-      thumbnailUrl: "https://images.unsplash.com/photo-1513451713350-dee890297c4a?auto=format&fit=crop&w=800&q=80",
-      category: "friendship",
-      description: "فيديو مسلي يعلم كيف تبني صداقات جديدة وتكون صديقاً جميلاً ومحترماً في كل مكان تروه.",
-    },
-  ];
-
   useEffect(() => {
     const fetchVideos = async () => {
       try {
@@ -76,18 +32,10 @@ export default function VideosPage() {
         querySnapshot.forEach((docSnap) => {
           dbVideos.push({ id: docSnap.id, ...docSnap.data() } as VideoItem);
         });
-
-        // Combine seed videos with DB videos (avoiding duplicates)
-        const combined = [...dbVideos];
-        seedVideos.forEach((seed) => {
-          if (!combined.some((v) => v.youtubeId === seed.youtubeId)) {
-            combined.push(seed);
-          }
-        });
-        setVideos(combined);
+        setVideos(dbVideos);
       } catch (err) {
-        console.warn("Failed to load videos from Firestore, loading static seed videos:", err);
-        setVideos(seedVideos);
+        console.warn("Failed to load videos from Firestore:", err);
+        setVideos([]);
       } finally {
         setLoading(false);
       }
@@ -150,8 +98,11 @@ export default function VideosPage() {
           </div>
         ) : filteredVideos.length === 0 ? (
           <div className="py-24 text-center flex flex-col items-center gap-3">
-            <span className="text-6xl animate-bounce-subtle">🕊️</span>
-            <p className="font-bold text-gray-400 text-lg">لا توجد فيديوهات في هذا القسم حالياً، يرجى تصفح بقية الأقسام!</p>
+            <span className="text-6xl animate-bounce-subtle">�</span>
+            <h3 className="font-black text-gray-800 text-xl">لا توجد فيديوهات متاحة حالياً.</h3>
+            <p className="max-w-xl text-gray-500 font-bold leading-relaxed">
+              هذه الصفحة تعتمد الآن على روابط الفيديو التي تُضاف من قبل الإدارة فقط. تفضل بالدخول إلى لوحة الإدارة لإضافة رابط YouTube أو Facebook أو TikTok للعمل داخل WebView.
+            </p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -177,8 +128,8 @@ export default function VideosPage() {
                       />
                     ) : (
                       <div className="w-full h-full bg-[#2D3748] flex flex-col items-center justify-center text-white text-sm font-black px-4 text-center">
-                        <span className="text-lg mb-2">🎬</span>
-                        <span>فيديو مباشر من إدخال الإدارة</span>
+                        <span className="text-3xl mb-2">📺</span>
+                        <span>هذا الفيديو من رابط الإدارة</span>
                       </div>
                     )}
                   <div className="absolute inset-0 bg-black/10 group-hover:bg-black/30 transition-colors flex items-center justify-center">
@@ -242,14 +193,22 @@ export default function VideosPage() {
 
               {/* Interactive Player (WebView Frame) */}
               <div className="relative aspect-video bg-black border-b-4 border-[#2D3748]">
-                {selectedVideo.videoUrl || selectedVideo.sourceUrl ? (
+                {selectedVideo.videoUrl ? (
                   <video
                     className="w-full h-full"
-                    src={selectedVideo.videoUrl || selectedVideo.sourceUrl}
+                    src={selectedVideo.videoUrl}
                     controls
                     autoPlay
                     playsInline
                   />
+                ) : selectedVideo.sourceUrl ? (
+                  <iframe
+                    className="w-full h-full"
+                    src={selectedVideo.sourceUrl}
+                    title={selectedVideo.title}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  ></iframe>
                 ) : selectedVideo.youtubeId ? (
                   <iframe
                     className="w-full h-full"
