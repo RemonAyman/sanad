@@ -31,6 +31,7 @@ export async function uploadFile(
       `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/${resourceType === "raw" ? "auto" : resourceType}/upload`,
       {
         method: "POST",
+        body: formData,
       }
     );
 
@@ -84,35 +85,13 @@ async function simulateUpload(
   }
 
   // 3. Images & Drawings
-  // If the file is a drawing blob, we try to convert to dataURL, else generate a cute SVG representation
+  // When Cloudinary is unreachable, return a small placeholder URL instead of a huge data URL.
   if (file instanceof File || file instanceof Blob) {
-    try {
-      const dataUrl = await blobToDataURL(file);
-      return {
-        url: dataUrl,
-        publicId,
-        isSimulated: true,
-      };
-    } catch {
-      // Fallback SVG image
-      const colors = ["#63B3ED", "#9F7AEA", "#68D391", "#F6E05E", "#FBB6CE"];
-      const randomColor = colors[Math.floor(Math.random() * colors.length)];
-      const svg = `
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
-          <rect width="100%" height="100%" fill="#F7FAFC"/>
-          <circle cx="200" cy="200" r="120" fill="${randomColor}" opacity="0.3"/>
-          <text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" font-family="'Cairo', sans-serif" font-size="24" font-weight="bold" fill="#4A5568">سند مساحة أمان 🌟</text>
-          <text x="50%" y="58%" dominant-baseline="middle" text-anchor="middle" font-family="'Cairo', sans-serif" font-size="16" fill="#718096">لوحة رسمة / ملف مرفوع بنجاح</text>
-          <path d="M150,280 Q200,320 250,280" stroke="#4A5568" stroke-width="5" fill="none" stroke-linecap="round"/>
-        </svg>
-      `;
-      const encodedSvg = btoa(unescape(encodeURIComponent(svg)));
-      return {
-        url: `data:image/svg+xml;base64,${encodedSvg}`,
-        publicId,
-        isSimulated: true,
-      };
-    }
+    return {
+      url: "https://res.cloudinary.com/demo/image/upload/w_400,h_300,c_fill/sample.jpg",
+      publicId,
+      isSimulated: true,
+    };
   }
 
   return {
