@@ -10,9 +10,11 @@ import { Play, Sparkles, Star, Award, Heart, Film, Search } from "lucide-react";
 interface VideoItem {
   id: string;
   title: string;
-  youtubeId: string;
-  category: "anti-bullying" | "confidence" | "respect" | "anger-control" | "friendship";
   description: string;
+  category: "anti-bullying" | "confidence" | "respect" | "anger-control" | "friendship";
+  youtubeId?: string;
+  videoUrl?: string;
+  thumbnailUrl?: string;
 }
 
 export default function VideosPage() {
@@ -26,45 +28,43 @@ export default function VideosPage() {
     {
       id: "seed-1",
       title: "التنمر المدرسي: كيف نتعامل معه بذكاء وشجاعة؟ 🛡️",
-      youtubeId: "pew8c2Z19l0",
+      videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+      thumbnailUrl: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=800&q=80",
       category: "anti-bullying",
-      description: "فيديو جميل يعلمك كيف تواجه التنمر وتتكلم بثقة وتطلب المساعدة من الكبار دون خوف.",
+      description: "فيديو مسلي قصته في الرسم يساعد الأطفال على فهم التمييز وكيف يمكن أن نكون دعماً لبعضنا بطريقة لطيفة.",
     },
     {
       id: "seed-2",
       title: "قصة عن الثقة بالنفس للأطفال: أنت رائع كما أنت! 🌟",
-      youtubeId: "Qp492j22_Jk",
+      videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+      thumbnailUrl: "https://images.unsplash.com/photo-1517487881594-2787fef5ebf7?auto=format&fit=crop&w=800&q=80",
       category: "confidence",
-      description: "تعلّم كيف تحب نفسك وتثق في قدراتك الخاصة لأنك طفل مميز وموهوب ولن يوقفك شيء!",
+      description: "فيديو تعليمي يساعد الطفل على أن يثق في نفسه ويتقبل قدراته ويكمل رحلة التعلم بشجاعة.",
     },
     {
       id: "seed-3",
       title: "ما هو الاحترام المتبادل؟ قصص تربوية هادفة 🤝",
-      youtubeId: "U3Z_n_9nIes",
+      videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+      thumbnailUrl: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=80",
       category: "respect",
-      description: "فيديو يعرض كيف نحترم الآخرين ونعامل زملائنا بلطف لنعيش جميعاً في حب وسلام.",
+      description: "فيديو قصير يعلم الطفل كيفية احترام نفسه والآخرين وكيف يبني علاقتها بالمحيط بحب وهدوء.",
     },
     {
       id: "seed-4",
       title: "التحكم في الغضب: كيف أهدأ عندما أشعر بالانزعاج؟ 🕊️",
-      youtubeId: "3mKq84i-U8g",
+      videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+      thumbnailUrl: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=80",
       category: "anger-control",
-      description: "تمرين التنفس السحري والعد إلى 10 لمساعدة أصدقائنا في إزالة الغضب وتهدئة مشاعرهم سريعاً.",
+      description: "فيديو يساعد الأطفال على التعرف لطريقة التنفس والهدوء حتى لا يسيطر عليهم الغضب فجأة.",
     },
     {
       id: "seed-5",
       title: "سر الصداقة الحقيقية: كيف أصنع أصدقاء أوفياء؟ 🧸",
-      youtubeId: "k5uP50P1gq0",
+      videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+      thumbnailUrl: "https://images.unsplash.com/photo-1513451713350-dee890297c4a?auto=format&fit=crop&w=800&q=80",
       category: "friendship",
-      description: "فيديو رائع يلخص أهمية الصداقة وطريقة التعامل اللطيف لصناعة صداقات تدوم طويلاً.",
+      description: "فيديو مسلي يعلم كيف تبني صداقات جديدة وتكون صديقاً جميلاً ومحترماً في كل مكان تروه.",
     },
-    {
-      id: "seed-6",
-      title: "بناء تقدير الذات والتغلب على الخوف المدرسي 💪",
-      youtubeId: "vB0X6-aP92k",
-      category: "confidence",
-      description: "شاهد كيف تتغلب على رهبة الفصل الجديد والتحدث أمام المعلم بثقة وقوة.",
-    }
   ];
 
   useEffect(() => {
@@ -162,12 +162,23 @@ export default function VideosPage() {
               >
                 {/* Thumbnail Preview with Play button */}
                 <div className="relative aspect-video border-b-4 border-[#2D3748] bg-gray-900 overflow-hidden flex items-center justify-center">
-                  <img
-                    src={`https://img.youtube.com/vi/${video.youtubeId}/hqdefault.jpg`}
-                    alt={video.title}
-                    className="w-full h-full object-cover opacity-85 group-hover:scale-105 transition-transform duration-500"
-                  />
-                  {/* Glowing Play overlay */}
+                    {video.thumbnailUrl ? (
+                      <img
+                        src={video.thumbnailUrl}
+                        alt={video.title}
+                        className="w-full h-full object-cover opacity-85 group-hover:scale-105 transition-transform duration-500"
+                      />
+                    ) : video.youtubeId ? (
+                      <img
+                        src={`https://img.youtube.com/vi/${video.youtubeId}/hqdefault.jpg`}
+                        alt={video.title}
+                        className="w-full h-full object-cover opacity-85 group-hover:scale-105 transition-transform duration-500"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-[#2D3748] flex items-center justify-center text-white text-sm font-black px-4 text-center">
+                        فيديو قابل للتشغيل مباشرة من داخل التطبيق
+                      </div>
+                    )}
                   <div className="absolute inset-0 bg-black/10 group-hover:bg-black/30 transition-colors flex items-center justify-center">
                     <div className="w-16 h-16 rounded-full bg-white border-3 border-[#2D3748] flex items-center justify-center text-2xl shadow-lg transform group-hover:scale-110 rotate-0 group-hover:rotate-6 transition-all duration-300">
                       ▶️
@@ -229,29 +240,54 @@ export default function VideosPage() {
 
               {/* Interactive Player (WebView Frame) */}
               <div className="relative aspect-video bg-black border-b-4 border-[#2D3748]">
-                <iframe
-                  className="w-full h-full"
-                  src={`https://www.youtube.com/embed/${selectedVideo.youtubeId}?autoplay=1&rel=0`}
-                  title={selectedVideo.title}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                ></iframe>
+                {selectedVideo.videoUrl ? (
+                  <video
+                    className="w-full h-full"
+                    src={selectedVideo.videoUrl}
+                    controls
+                    autoPlay
+                    playsInline
+                  />
+                ) : selectedVideo.youtubeId ? (
+                  <iframe
+                    className="w-full h-full"
+                    src={`https://www.youtube.com/embed/${selectedVideo.youtubeId}?autoplay=1&rel=0`}
+                    title={selectedVideo.title}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  ></iframe>
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-white text-sm font-black px-4 text-center bg-[#2D3748]">
+                    هذا الفيديو غير متوفر حالياً، يرجى اختيار فيديو آخر.
+                  </div>
+                )}
               </div>
 
               {/* Secure Web Fallback for blocked embeds */}
               <div className="p-6 bg-gray-50 flex flex-col md:flex-row items-center justify-between gap-4">
                 <p className="text-xs font-extrabold text-gray-500 text-right leading-relaxed max-w-md">
-                  💡 هل تواجه مشكلة أو رسالة "الفيديو غير متاح"؟ هذا يحدث أحياناً بسبب قيود الحماية. لا تقلق، اضغط على الزر الذهبي لفتحه مباشرة على يوتيوب:
+                  💡 إذا لم يعمل العرض داخل التطبيق، اضغط على الرابط التالي لمشاهدة الفيديو مباشرة في صفحة تشغيل آمنة.
                 </p>
                 <div className="flex gap-2 w-full md:w-auto">
-                  <a
-                    href={`https://www.youtube.com/watch?v=${selectedVideo.youtubeId}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-grow md:flex-grow-0 px-6 py-3 bg-[#F6E05E] text-[#2D3748] border-3 border-[#2D3748] rounded-2xl font-black text-xs hover:bg-[#FAF089] hover:-translate-y-0.5 transition-all shadow-sm flex items-center justify-center gap-1.5 cursor-pointer"
-                  >
-                    <span>شاهد على يوتيوب 🍿</span>
-                  </a>
+                  {selectedVideo.youtubeId ? (
+                    <a
+                      href={`https://www.youtube.com/watch?v=${selectedVideo.youtubeId}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-grow md:flex-grow-0 px-6 py-3 bg-[#F6E05E] text-[#2D3748] border-3 border-[#2D3748] rounded-2xl font-black text-xs hover:bg-[#FAF089] hover:-translate-y-0.5 transition-all shadow-sm flex items-center justify-center gap-1.5 cursor-pointer"
+                    >
+                      <span>شاهد على يوتيوب 🍿</span>
+                    </a>
+                  ) : selectedVideo.videoUrl ? (
+                    <a
+                      href={selectedVideo.videoUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-grow md:flex-grow-0 px-6 py-3 bg-[#F6E05E] text-[#2D3748] border-3 border-[#2D3748] rounded-2xl font-black text-xs hover:bg-[#FAF089] hover:-translate-y-0.5 transition-all shadow-sm flex items-center justify-center gap-1.5 cursor-pointer"
+                    >
+                      <span>افتح الفيديو في نافذة جديدة 🎬</span>
+                    </a>
+                  ) : null}
                   <button
                     onClick={() => setSelectedVideo(null)}
                     className="px-5 py-3 bg-white text-gray-700 border-3 border-gray-300 rounded-2xl font-black text-xs hover:bg-gray-100 transition-all cursor-pointer"

@@ -207,13 +207,12 @@ export default function Home() {
         </div>
 
         <div className="relative rounded-3xl overflow-hidden border-4 border-[#2D3748] shadow-kids aspect-video bg-black">
-          <iframe
-            className="w-full h-full"
-            src="https://www.youtube.com/embed/pew8c2Z19l0?si=L7wD0d29Zsz0q-r4"
-            title="فيديو تعليمي للأطفال عن التنمر"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          ></iframe>
+          <video
+            className="w-full h-full object-cover"
+            controls
+            src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+            poster="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80"
+          />
         </div>
       </section>
 
