@@ -2,23 +2,42 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
-First, run the development server:
+First, copy the example env file and fill in your Cloudinary details:
 
 ```bash
+cp .env.example .env.local
+```
+
+Then install dependencies and run the development server:
+
+```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+The app is already configured for Firebase Authentication, Firestore, and Cloudinary uploads.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Firebase setup
+
+- Your Firebase Web App config is already included in `src/lib/firebase.ts` using environment variables.
+- Use `firestore.rules` from the project root to secure Firestore access.
+- The admin account is expected to use:
+  - Email: `admin@gmail.com`
+  - Password: `admin123`
+
+### Project features
+
+- Arabic RTL responsive UI for children
+- Child dashboard with mood tracker, problem report form, and file uploads
+- Real-time chat system with simulated supportive responses
+- Zoom meeting booking request system
+- Educational videos library
+- Talents upload section
+- Admin dashboard with moderation and stats
+
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load Arabic-friendly fonts.
 
 ## Learn More
 
