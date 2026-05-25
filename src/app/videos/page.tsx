@@ -14,6 +14,7 @@ interface VideoItem {
   category: "anti-bullying" | "confidence" | "respect" | "anger-control" | "friendship";
   youtubeId?: string;
   videoUrl?: string;
+  sourceUrl?: string;
   thumbnailUrl?: string;
 }
 
@@ -175,8 +176,9 @@ export default function VideosPage() {
                         className="w-full h-full object-cover opacity-85 group-hover:scale-105 transition-transform duration-500"
                       />
                     ) : (
-                      <div className="w-full h-full bg-[#2D3748] flex items-center justify-center text-white text-sm font-black px-4 text-center">
-                        فيديو قابل للتشغيل مباشرة من داخل التطبيق
+                      <div className="w-full h-full bg-[#2D3748] flex flex-col items-center justify-center text-white text-sm font-black px-4 text-center">
+                        <span className="text-lg mb-2">🎬</span>
+                        <span>فيديو مباشر من إدخال الإدارة</span>
                       </div>
                     )}
                   <div className="absolute inset-0 bg-black/10 group-hover:bg-black/30 transition-colors flex items-center justify-center">
@@ -240,10 +242,10 @@ export default function VideosPage() {
 
               {/* Interactive Player (WebView Frame) */}
               <div className="relative aspect-video bg-black border-b-4 border-[#2D3748]">
-                {selectedVideo.videoUrl ? (
+                {selectedVideo.videoUrl || selectedVideo.sourceUrl ? (
                   <video
                     className="w-full h-full"
-                    src={selectedVideo.videoUrl}
+                    src={selectedVideo.videoUrl || selectedVideo.sourceUrl}
                     controls
                     autoPlay
                     playsInline
@@ -278,9 +280,9 @@ export default function VideosPage() {
                     >
                       <span>شاهد على يوتيوب 🍿</span>
                     </a>
-                  ) : selectedVideo.videoUrl ? (
+                  ) : selectedVideo.videoUrl || selectedVideo.sourceUrl ? (
                     <a
-                      href={selectedVideo.videoUrl}
+                      href={selectedVideo.videoUrl || selectedVideo.sourceUrl}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex-grow md:flex-grow-0 px-6 py-3 bg-[#F6E05E] text-[#2D3748] border-3 border-[#2D3748] rounded-2xl font-black text-xs hover:bg-[#FAF089] hover:-translate-y-0.5 transition-all shadow-sm flex items-center justify-center gap-1.5 cursor-pointer"

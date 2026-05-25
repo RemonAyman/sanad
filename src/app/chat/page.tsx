@@ -148,6 +148,30 @@ export default function ChatPage() {
     "كل شيء سيكون بخير يا بطل، نحن فخورون جداً بشجاعتك! 🏆"
   ];
 
+  const pickAiReply = (message: string) => {
+    const normalized = message.trim().toLowerCase();
+
+    if (/حزين|زعلان|مهموم|حزن/.test(normalized)) {
+      return "أفهم شعورك، وأنت لست وحدك. مع بعض سنشعر بتحسن، وأنا هنا لأدعمك دائماً 💛";
+    }
+    if (/خائف|قلق|مرتعش|أخاف/.test(normalized)) {
+      return "لا تقلق، أنت في مكان آمن ويمكنك مشاركة كل ما يقلقك. سنواجه ذلك خطوة بخطوة معاً. 🤝";
+    }
+    if (/غضب|زعل|متعصب|انزعاج/.test(normalized)) {
+      return "من الطبيعي أن تشعر بهذا، ومهم نعطي نفسنا فرصة لنهدأ. جرب تنفس بعمق وأخبرني ماذا حدث 🌿";
+    }
+    if (/وحدي|وحيد|لا أحد/.test(normalized)) {
+      return "أنت مهم جداً ولست وحدك هنا. يمكنني الاستماع لك دائماً ونسعى معاً لتخفيف هذا الشعور ❤️";
+    }
+    if (/حلو|مبسوط|سعيد|فرحان/.test(normalized)) {
+      return "فرحان جداً لأجلك! استمر في مشاركة الأشياء الجميلة، لأن البسمة منك تضيء اليوم 😊";
+    }
+    if (/مدرسة|أصدقاء|زملاء/.test(normalized)) {
+      return "المدرسة والأصدقاء ممكن يكونوا ممتعين وأحياناً صعبين. أخبرني أكثر لكي أساعدك بكيفية التعامل بطريقة لطيفة ومرحة ✨";
+    }
+    return aiReplies[Math.floor(Math.random() * aiReplies.length)];
+  };
+
   // Send message to Firestore
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -195,7 +219,7 @@ export default function ChatPage() {
 
       setTimeout(async () => {
         try {
-          const randomReply = aiReplies[Math.floor(Math.random() * aiReplies.length)];
+          const randomReply = pickAiReply(messageText || "");
           
           await addDoc(collection(db, "messages"), {
             userId: user!.uid,

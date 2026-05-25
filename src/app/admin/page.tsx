@@ -61,7 +61,8 @@ export default function AdminDashboard() {
   // Form states for adding video
   const [newVideoTitle, setNewVideoTitle] = useState("");
   const [newVideoCategory, setNewVideoCategory] = useState("anti-bullying");
-  const [newVideoYoutubeId, setNewVideoYoutubeId] = useState("");
+  const [newVideoSourceUrl, setNewVideoSourceUrl] = useState("");
+  const [newVideoDescription, setNewVideoDescription] = useState("فيديو تعليمي مميز يساعد الأطفال على النمو النفسي والاجتماعي.");
 
   // Loading States
   const [dbLoading, setDbLoading] = useState(true);
@@ -264,11 +265,38 @@ export default function AdminDashboard() {
     }
   };
 
+  const extractYouTubeVideoId = (value: string) => {
+    const url = value.trim();
+    const ytRegex = /(?:youtube\.com\/(?:watch\?v=|embed\/|v\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/;
+    const match = url.match(ytRegex);
+    if (match && match[1]) return match[1];
+    const idRegex = /^[A-Za-z0-9_-]{11}$/;
+    return idRegex.test(url) ? url : null;
+  };
+
+  const isValidHttpUrl = (value: string) => {
+    try {
+      const url = new URL(value.trim());
+      return url.protocol === "http:" || url.protocol === "https:";
+    } catch {
+      return false;
+    }
+  };
+
   // 6. Educational Videos CRUD
   const handleAddVideo = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newVideoTitle.trim() || !newVideoYoutubeId.trim()) {
-      showToast("أدخل عنوان الفيديو ومعرف يوتيوب 🎬", "error");
+    if (!newVideoTitle.trim() || !newVideoSourceUrl.trim()) {
+      showToast("أدخل عنوان الفيديو ورابط الفيديو أو معرف YouTube 🎬", "error");
+      return;
+    }
+
+    const rawSource = newVideoSourceUrl.trim();
+    const youtubeId = extractYouTubeVideoId(rawSource);
+    const isUrl = isValidHttpUrl(rawSource);
+
+    if (!youtubeId && !isUrl) {
+      showToast("يرجى إدخال رابط صالح أو معرف YouTube صحيح.", "error");
       return;
     }
 
@@ -276,16 +304,20 @@ export default function AdminDashboard() {
       await addDoc(collection(db, "videos"), {
         title: newVideoTitle.trim(),
         category: newVideoCategory,
-        youtubeId: newVideoYoutubeId.trim(),
+        description: newVideoDescription.trim(),
+        youtubeId: youtubeId || "",
+        videoUrl: youtubeId ? "" : rawSource,
+        sourceUrl: rawSource,
         createdAt: new Date(),
-        description: "فيديو مضاف من قبل الإدارة لمساعدة الأبطال.",
       });
 
       showToast("تمت إضافة الفيديو التعليمي الجديد بنجاح! 🍿✨", "success");
       setNewVideoTitle("");
-      setNewVideoYoutubeId("");
+      setNewVideoSourceUrl("");
+      setNewVideoDescription("فيديو تعليمي مميز يساعد الأطفال على النمو النفسي والاجتماعي.");
     } catch (err) {
       console.error(err);
+      showToast("فشل إضافة الفيديو، حاول مرة أخرى.", "error");
     }
   };
 
@@ -749,15 +781,26 @@ export default function AdminDashboard() {
                       </select>
                     </div>
 
-                    <div className="flex flex-col gap-1.5">
-                      <label className="font-extrabold text-xs text-gray-600">معرف يوتيوب (ID):</label>
+                    <div className="flex flex-col gap-1.5 sm:col-span-2">
+                      <label className="font-extrabold text-xs text-gray-600">رابط الفيديو أو معرف YouTube:</label>
                       <input
                         type="text"
-                        placeholder="مثال: pew8c2Z19l0"
-                        value={newVideoYoutubeId}
-                        onChange={(e) => setNewVideoYoutubeId(e.target.value)}
+                        placeholder="مثال: https://www.youtube.com/watch?v=pew8c2Z19l0 أو pew8c2Z19l0"
+                        value={newVideoSourceUrl}
+                        onChange={(e) => setNewVideoSourceUrl(e.target.value)}
                         className="px-3 py-2 bg-white border border-gray-300 rounded-xl font-bold text-xs text-left dir-ltr"
                         required
+                      />
+                    </div>
+
+                    <div className="flex flex-col gap-1.5 sm:col-span-4">
+                      <label className="font-extrabold text-xs text-gray-600">وصف الفيديو (اختياري):</label>
+                      <input
+                        type="text"
+                        placeholder="مثال: فيديو يساعد الأطفال على بناء الثقة بالنفس"
+                        value={newVideoDescription}
+                        onChange={(e) => setNewVideoDescription(e.target.value)}
+                        className="px-3 py-2 bg-white border border-gray-300 rounded-xl font-bold text-xs text-right"
                       />
                     </div>
 
@@ -783,7 +826,19 @@ export default function AdminDashboard() {
                           {vid.category}
                         </span>
                         <h5 className="font-black text-sm text-gray-700 leading-snug">{vid.title}</h5>
-                        <p className="text-[10px] font-bold text-gray-400">معرف يوتيوب: {vid.youtubeId}</p>
+                        <p className="text-[10px] font-bold text-gray-400">
+                          المصدر: {vid.youtubeId ? "يوتيوب" : vid.videoUrl ? "رابط مباشر" : "غير محدد"}
+                        </p>
+                        {vid.videoUrl && (
+                          <a
+                            href={vid.videoUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-[10px] text-blue-600 hover:underline"
+                          >
+                            فتح الرابط المباشر
+                          </a>
+                        )}
                       </div>
 
                       <div className="flex justify-between items-center mt-4 border-t pt-2.5">
