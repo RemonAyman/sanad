@@ -207,11 +207,12 @@ export default function Home() {
         </div>
 
         <div className="relative rounded-3xl overflow-hidden border-4 border-[#2D3748] shadow-kids aspect-video bg-black">
-          <video
-            className="w-full h-full object-cover"
-            controls
-            src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-            poster="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80"
+          <iframe
+            className="w-full h-full"
+            src="https://www.youtube.com/embed/oze4tQ63rvA?autoplay=0&rel=0"
+            title="فيديو اليوم: لا للتنمر"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
           />
         </div>
       </section>

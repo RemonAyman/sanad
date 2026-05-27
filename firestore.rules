@@ -3,7 +3,8 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     function isAdmin() {
-      return request.auth != null && request.auth.token.email == "admin@gmail.com";
+      return request.auth != null
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
     }
 
     function isOwner(userId) {
@@ -45,7 +46,13 @@ service cloud.firestore {
 
     match /talents/{talentId} {
       allow create: if request.auth != null
-        && request.auth.uid == request.resource.data.userId;
+        && request.auth.uid == request.resource.data.userId
+        && request.resource.data.title is string
+        && request.resource.data.type in ["drawing", "story", "video"]
+        && request.resource.data.contentUrl is string
+        && request.resource.data.storyText is string
+        && request.resource.data.approved == false
+        && request.resource.data.createdAt is timestamp;
       allow read: if isAdmin() || resource.data.approved == true;
       allow update: if isAdmin();
       allow delete: if isAdmin();
