@@ -4,6 +4,7 @@ service cloud.firestore {
   match /databases/{database}/documents {
     function isAdmin() {
       return request.auth != null
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).exists()
         && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
     }
 
@@ -53,7 +54,7 @@ service cloud.firestore {
         && request.resource.data.storyText is string
         && request.resource.data.approved == false
         && request.resource.data.createdAt is timestamp;
-      allow read: if isAdmin() || resource.data.approved == true;
+      allow read: if request.auth != null || resource.data.approved == true;
       allow update: if isAdmin();
       allow delete: if isAdmin();
     }

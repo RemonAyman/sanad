@@ -45,18 +45,15 @@ export default function TalentsPage() {
   // Fetch approved talents
   const fetchApprovedTalents = async () => {
     try {
-      const q = query(
-        collection(db, "talents"),
-        where("approved", "==", true)
-      );
-      const querySnapshot = await getDocs(q);
-      const fetched: any[] = [];
-      querySnapshot.forEach((docSnap) => {
-        fetched.push({ id: docSnap.id, ...docSnap.data() });
+      const talentsQuery = query(collection(db, "talents"));
+      const talentsSnapshot = await getDocs(talentsQuery);
+      const fetchedTalents: any[] = [];
+      talentsSnapshot.forEach((docSnap) => {
+        fetchedTalents.push({ id: docSnap.id, ...docSnap.data() });
       });
-      // Sort chronologically by date
-      fetched.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
-      setTalents(fetched);
+
+      fetchedTalents.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+      setTalents(fetchedTalents);
     } catch (err) {
       console.error("Error loading talents:", err);
     } finally {
@@ -462,6 +459,11 @@ export default function TalentsPage() {
                         <span className="text-[10px] font-black px-2 py-0.5 bg-[#FCFAFF] border-2 border-cartoon-soft rounded-lg self-start">
                           {item.type === "drawing" ? "رسمة فنية 🎨" : item.type === "story" ? "قصة مشوقة ✍️" : "فيديو موهبة 🎥"}
                         </span>
+                        {!item.approved && (
+                          <span className="text-[10px] font-black px-2 py-0.5 bg-yellow-100 border-2 border-yellow-300 rounded-lg self-start text-yellow-800">
+                            بانتظار الموافقة ⏳
+                          </span>
+                        )}
                         <h3 className="font-black text-lg text-[#2D3748] leading-tight text-right">
                           {item.title}
                         </h3>
