@@ -1,10 +1,8 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { db } from "@/lib/firebase";
-import { collection, getDocs } from "firebase/firestore";
 import { Play, Sparkles, Star, Award, Heart, Film, Search } from "lucide-react";
 
 interface VideoItem {
@@ -13,36 +11,174 @@ interface VideoItem {
   description: string;
   category: "anti-bullying" | "confidence" | "respect" | "anger-control" | "friendship";
   youtubeId?: string;
+  embedUrl?: string;
   videoUrl?: string;
   sourceUrl?: string;
   thumbnailUrl?: string;
 }
 
+const defaultVideos: VideoItem[] = [
+  {
+    id: "video-1",
+    title: "تأثير الكلمة السيئة",
+    description: "قصة تعليمية عن قوة الكلام وتأثيره على مشاعر الآخرين.",
+    category: "anti-bullying",
+    youtubeId: "lwYf9AbQfbU",
+  },
+  {
+    id: "video-2",
+    title: "التخلص من الغضب",
+    description: "طرق بسيطة للأطفال للتحكم في الغضب بسلام.",
+    category: "anger-control",
+    youtubeId: "08BHHqN6NYo",
+  },
+  {
+    id: "video-3",
+    title: "الثقة بالنفس 1",
+    description: "فيديو يساعد الطفل على بناء ثقته بنفسه خطوة بخطوة.",
+    category: "confidence",
+    youtubeId: "UI1DuW-iArs",
+  },
+  {
+    id: "video-4",
+    title: "الثقة بالنفس 2",
+    description: "قصة جديدة لتعزيز الثقة بالنفس لدى الأطفال.",
+    category: "confidence",
+    youtubeId: "2ho3W7rrd2I",
+  },
+  {
+    id: "video-5",
+    title: "الثقة بالنفس 3",
+    description: "معلومات ممتعة لتشجيع الطفل على حب نفسه.",
+    category: "confidence",
+    youtubeId: "6yiSSUnKpUc",
+  },
+  {
+    id: "video-6",
+    title: "الثقة بالنفس 4",
+    description: "فيديو قصير يساعد الأطفال على التفكير بثقة.",
+    category: "confidence",
+    youtubeId: "wTycAHWUlEg",
+  },
+  {
+    id: "video-7",
+    title: "قصة الاحترام سر المحبة",
+    description: "قصة مؤثرة عن الاحترام وكيف يجلب المحبة.",
+    category: "respect",
+    youtubeId: "PLgNI3teevQ",
+  },
+  {
+    id: "video-8",
+    title: "قصة كلنا مختلفون",
+    description: "قصة تعليمية عن احترام الاختلاف والتعايش مع الجميع.",
+    category: "respect",
+    youtubeId: "HhsDzKYRaso",
+  },
+  {
+    id: "video-9",
+    title: "وحش الغضب",
+    description: "فيديو يساعد الطفل على التعرف على غضبه والتعامل معه.",
+    category: "anger-control",
+    youtubeId: "s_z4Z02Lpk0",
+  },
+  {
+    id: "video-10",
+    title: "لا للتنمر",
+    description: "رسالة قوية للأطفال بعدم قبول التنمر بأي شكل.",
+    category: "anti-bullying",
+    youtubeId: "oTfXz6UNLN4",
+  },
+  {
+    id: "video-11",
+    title: "زياد والسخرية",
+    description: "حكاية تعليمية عن السخرية وكيف تؤثر على الأصدقاء.",
+    category: "anti-bullying",
+    youtubeId: "z3wceKwQPmA",
+  },
+  {
+    id: "video-12",
+    title: "جسر الصداقة",
+    description: "قصة قصيرة عن قوة الصداقة والتعاون.",
+    category: "friendship",
+    youtubeId: "t-n48BawWlo",
+  },
+  {
+    id: "video-13",
+    title: "الصديق وقت الضيق",
+    description: "درس جميل عن كيفية الوقوف إلى جانب الأصدقاء.",
+    category: "friendship",
+    youtubeId: "pBR0hOA_SyU",
+  },
+  {
+    id: "video-14",
+    title: "الصديق المخلص",
+    description: "قصة عن الصديق الحقيقي ودوره في الحياة.",
+    category: "friendship",
+    youtubeId: "HvijxnEwVak",
+  },
+  {
+    id: "video-15",
+    title: "السيطرة على الغضب",
+    description: "نصائح بسيطة للطفل للهدوء عندما يغضب.",
+    category: "anger-control",
+    youtubeId: "jWeWZGV68l8",
+  },
+  {
+    id: "video-16",
+    title: "السيطرة على الغضب في اللعب",
+    description: "كيف يلعب الطفل براحة دون أن يتحول اللعب إلى غضب.",
+    category: "anger-control",
+    youtubeId: "hDQduOVLJB4",
+  },
+  {
+    id: "video-17",
+    title: "أغنية السيطرة على الغضب",
+    description: "أغنية ممتعة تعلم الأطفال التحكم في مشاعرهم.",
+    category: "anger-control",
+    youtubeId: "mamSfMYWACM",
+  },
+  {
+    id: "video-18",
+    title: "التحكم في الغضب",
+    description: "درس بسيط ومباشر عن التحكم في الانفعال.",
+    category: "anger-control",
+    youtubeId: "uP5BNTSyNYI",
+  },
+  {
+    id: "video-19",
+    title: "الغضب والبالون الطائر",
+    description: "قصة مرحة تربط بين الغضب والطيران الحر.",
+    category: "anger-control",
+    youtubeId: "MwOiuoPAQOc",
+  },
+  {
+    id: "video-20",
+    title: "التنمر والثقة بالنفس",
+    description: "فيديو يعزز الوعي بالثقة بالنفس والتعامل مع التنمر.",
+    category: "anti-bullying",
+    youtubeId: "7-lBYU7iRgM",
+  },
+  {
+    id: "video-21",
+    title: "احترام الآخر",
+    description: "رسالة قصيرة عن كيف نحترم الآخرين ونتصرف معهم بلطف.",
+    category: "respect",
+    youtubeId: "A2rtQNK4Nps",
+  },
+  {
+    id: "video-22",
+    title: "احترام الآخرين",
+    description: "قصة صغيرة عن أهمية الاحترام المتبادل بين الأطفال.",
+    category: "respect",
+    youtubeId: "xsKoAUp-_dI",
+  },
+];
+
 export default function VideosPage() {
   const [activeCategory, setActiveCategory] = useState<string>("all");
-  const [videos, setVideos] = useState<VideoItem[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [videos, setVideos] = useState<VideoItem[]>(defaultVideos);
   const [selectedVideo, setSelectedVideo] = useState<VideoItem | null>(null);
-
-  useEffect(() => {
-    const fetchVideos = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, "videos"));
-        const dbVideos: VideoItem[] = [];
-        querySnapshot.forEach((docSnap) => {
-          dbVideos.push({ id: docSnap.id, ...docSnap.data() } as VideoItem);
-        });
-        setVideos(dbVideos);
-      } catch (err) {
-        console.warn("Failed to load videos from Firestore:", err);
-        setVideos([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchVideos();
-  }, []);
+  const [loading] = useState(false);
 
   const categories = [
     { id: "all", label: "كل الفيديوهات 🎬" },
@@ -53,9 +189,30 @@ export default function VideosPage() {
     { id: "friendship", label: "الصداقة الجميلة 🧸" },
   ];
 
+  const getEmbedUrl = (video: VideoItem) => {
+    if (video.videoUrl) return video.videoUrl;
+    if (video.youtubeId) return `https://www.youtube.com/embed/${video.youtubeId}?autoplay=1&rel=0`;
+    if (!video.sourceUrl) return null;
+
+    const raw = video.sourceUrl.trim();
+    const facebookMatch = raw.match(/(?:facebook\.com|m\.facebook\.com|fb\.watch)\//i);
+    if (facebookMatch) {
+      return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(raw)}&show_text=0&width=560`;
+    }
+
+    const tiktokMatch = raw.match(/(?:tiktok\.com|vm\.tiktok\.com)\/(?:@[^/]+\/video\/|embed\/v2\/|embed\/|video\/)?(\d+)/i);
+    if (tiktokMatch && tiktokMatch[1]) {
+      return `https://www.tiktok.com/embed/v2/${tiktokMatch[1]}`;
+    }
+
+    return raw;
+  };
+
   const filteredVideos = activeCategory === "all"
     ? videos
     : videos.filter((v) => v.category === activeCategory);
+
+  const selectedVideoEmbedUrl = selectedVideo ? getEmbedUrl(selectedVideo) : null;
 
   return (
     <div className="flex flex-col min-h-screen bg-[#FCFAFF]">
@@ -193,7 +350,7 @@ export default function VideosPage() {
 
               {/* Interactive Player (WebView Frame) */}
               <div className="relative aspect-video bg-black border-b-4 border-[#2D3748]">
-                {selectedVideo.videoUrl ? (
+                {selectedVideo?.videoUrl ? (
                   <video
                     className="w-full h-full"
                     src={selectedVideo.videoUrl}
@@ -201,19 +358,11 @@ export default function VideosPage() {
                     autoPlay
                     playsInline
                   />
-                ) : selectedVideo.youtubeId ? (
+                ) : selectedVideoEmbedUrl ? (
                   <iframe
                     className="w-full h-full"
-                    src={`https://www.youtube.com/embed/${selectedVideo.youtubeId}?autoplay=1&rel=0`}
-                    title={selectedVideo.title}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  ></iframe>
-                ) : selectedVideo.sourceUrl ? (
-                  <iframe
-                    className="w-full h-full"
-                    src={selectedVideo.sourceUrl}
-                    title={selectedVideo.title}
+                    src={selectedVideoEmbedUrl}
+                    title={selectedVideo?.title}
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
                   ></iframe>

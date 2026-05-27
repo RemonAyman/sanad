@@ -287,6 +287,29 @@ export default function AdminDashboard() {
     return /\.(mp4|webm|ogg|mov|m3u8)(\?|$)/i.test(value.trim());
   };
 
+  const buildEmbedUrl = (rawSource: string, youtubeId: string | null) => {
+    if (youtubeId) {
+      return `https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0`;
+    }
+
+    const raw = rawSource.trim();
+    const facebookMatch = raw.match(/(?:facebook\.com|m\.facebook\.com|fb\.watch)\//i);
+    if (facebookMatch) {
+      return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(raw)}&show_text=0&width=560`;
+    }
+
+    const tiktokMatch = raw.match(/(?:tiktok\.com|vm\.tiktok\.com)\/(?:@[^/]+\/video\/|embed\/v2\/|embed\/|video\/)?(\d+)/i);
+    if (tiktokMatch && tiktokMatch[1]) {
+      return `https://www.tiktok.com/embed/v2/${tiktokMatch[1]}`;
+    }
+
+    if (isDirectVideoUrl(raw)) {
+      return raw;
+    }
+
+    return raw;
+  };
+
   // 6. Educational Videos CRUD
   const handleAddVideo = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -310,6 +333,7 @@ export default function AdminDashboard() {
         category: newVideoCategory,
         description: newVideoDescription.trim(),
         youtubeId: youtubeId || "",
+        embedUrl: buildEmbedUrl(rawSource, youtubeId),
         videoUrl: youtubeId ? "" : isDirectVideoUrl(rawSource) ? rawSource : "",
         sourceUrl: rawSource,
         createdAt: new Date(),
@@ -834,11 +858,11 @@ export default function AdminDashboard() {
                         </span>
                         <h5 className="font-black text-sm text-gray-700 leading-snug">{vid.title}</h5>
                         <p className="text-[10px] font-bold text-gray-400">
-                          المصدر: {vid.youtubeId ? "يوتيوب" : vid.videoUrl ? "رابط مباشر" : "غير محدد"}
+                          المصدر: {vid.youtubeId ? "يوتيوب" : vid.videoUrl ? "رابط مباشر" : vid.sourceUrl ? "رابط خارجي" : "غير محدد"}
                         </p>
-                        {vid.videoUrl && (
+                        {(vid.videoUrl || vid.sourceUrl) && (
                           <a
-                            href={vid.videoUrl}
+                            href={vid.videoUrl || vid.sourceUrl}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-[10px] text-blue-600 hover:underline"
