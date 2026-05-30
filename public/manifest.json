@@ -1,0 +1,67 @@
+{
+  "name": "سند - منصة آمنة للأطفال",
+  "short_name": "سند",
+  "description": "منصة آمنة للأطفال للتحدث بحرية والحصول على دعم ضد التنمر والعنف",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#FCFAFF",
+  "theme_color": "#4F46E5",
+  "dir": "rtl",
+  "lang": "ar",
+  "categories": ["education", "social", "health"],
+  "screenshots": [
+    {
+      "src": "/screenshot-1.png",
+      "sizes": "540x720",
+      "type": "image/png",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/screenshot-2.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ],
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "192x192",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "دردشة آمنة",
+      "short_name": "دردشة",
+      "description": "ابدأ دردشة آمنة الآن",
+      "url": "/chat",
+      "icons": [
+        {
+          "src": "/chat-icon.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "احجز جلسة",
+      "short_name": "حجز",
+      "description": "احجز جلسة مع مختص",
+      "url": "/booking",
+      "icons": [
+        {
+          "src": "/booking-icon.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ]
+}

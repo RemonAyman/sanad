@@ -254,6 +254,82 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Why Choose Sanad - SEO Content Section */}
+      <section className="py-16 px-4 bg-[#F0FFF4] border-t-4 border-b-4 border-dashed border-green-300">
+        <div className="max-w-6xl mx-auto">
+          
+          <div className="text-center max-w-2xl mx-auto mb-12 flex flex-col gap-3">
+            <h2 className="text-3xl font-black text-[#2D3748]">✨ منصة سند توفر مساحة أمان كاملة للأطفال</h2>
+            <p className="text-gray-600 font-bold leading-relaxed">
+              سند هي منصة متخصصة في دعم الأطفال نفسياً وتربوياً. نحن نساعدك على التعامل مع المشاكل الشائعة التي تواجه الطفل في حياته اليومية والمدرسية.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+            
+            {/* Issue Cards */}
+            <div className="bg-white border-3 border-[#2D3748] p-6 rounded-2xl shadow-kids hover:shadow-lg transition-all">
+              <div className="text-3xl mb-3">🚫</div>
+              <h3 className="font-black text-lg text-[#2D3748] mb-2">مكافحة التنمر المدرسي</h3>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                التنمر هو من أخطر المشاكل التي يواجهها الأطفال في المدرسة. تساعدك سند على فهم التنمر والتعامل معه بشجاعة وثقة.
+              </p>
+            </div>
+
+            <div className="bg-white border-3 border-[#2D3748] p-6 rounded-2xl shadow-kids hover:shadow-lg transition-all">
+              <div className="text-3xl mb-3">😤</div>
+              <h3 className="font-black text-lg text-[#2D3748] mb-2">التحكم بالغضب والعصبية</h3>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                عندما تشعر بالغضب أو العصبية، قد تفقد السيطرة على تصرفاتك. نعلمك تقنيات للتحكم بالغضب والهدوء والاستقرار النفسي.
+              </p>
+            </div>
+
+            <div className="bg-white border-3 border-[#2D3748] p-6 rounded-2xl shadow-kids hover:shadow-lg transition-all">
+              <div className="text-3xl mb-3">⚠️</div>
+              <h3 className="font-black text-lg text-[#2D3748] mb-2">الحماية من العنف والإساءة</h3>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                إذا تعرضت للعنف أو الإساءة بأي شكل، سند موجودة لحمايتك والإبلاغ عن ذلك للجهات المختصة فوراً.
+              </p>
+            </div>
+
+            <div className="bg-white border-3 border-[#2D3748] p-6 rounded-2xl shadow-kids hover:shadow-lg transition-all">
+              <div className="text-3xl mb-3">😢</div>
+              <h3 className="font-black text-lg text-[#2D3748] mb-2">الدعم النفسي والعاطفي</h3>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                الدعم النفسي مهم للأطفال. تحدث مع مرشدين متخصصين يفهمون مشاعرك ويساعدونك على الشعور بالأفضل.
+              </p>
+            </div>
+
+            <div className="bg-white border-3 border-[#2D3748] p-6 rounded-2xl shadow-kids hover:shadow-lg transition-all">
+              <div className="text-3xl mb-3">🤝</div>
+              <h3 className="font-black text-lg text-[#2D3748] mb-2">التواصل الاجتماعي الآمن</h3>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                صداقات جديدة وتفاعل اجتماعي في مساحة آمنة. تعرف على أطفال آخرين يشاركونك نفس الاهتمامات والمشاعر.
+              </p>
+            </div>
+
+            <div className="bg-white border-3 border-[#2D3748] p-6 rounded-2xl shadow-kids hover:shadow-lg transition-all">
+              <div className="text-3xl mb-3">📚</div>
+              <h3 className="font-black text-lg text-[#2D3748] mb-2">التثقيف والتوعية</h3>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                فيديوهات وموارد تعليمية تساعدك على فهم نفسك والعالم من حولك بشكل صحي وسليم.
+              </p>
+            </div>
+
+          </div>
+
+          {/* Additional Context */}
+          <div className="bg-white border-3 border-[#2D3748] p-8 rounded-2xl text-center max-w-3xl mx-auto shadow-kids">
+            <p className="text-gray-600 font-bold leading-relaxed text-lg">
+              <span className="text-[#2D3748] font-black">منصة سند</span> هي صديقك الموثوق الذي يسمعك ويفهمك. 
+              نحن نوفر مساحة آمنة وسرية 100% حيث يمكنك التحدث عن أي شيء يضايقك في المدرسة أو الحياة.
+              سواء كنت تعاني من مشاكل اجتماعية، ضغط نفسي، أو مشاكل عائلية، نحن هنا لنساعدك ندعمك بكل محبة وحنان.
+            </p>
+          </div>
+
+        </div>
+      </section>
+
       {/* Call to Action Final banner */}
       <section className="py-16 px-4 bg-gradient-to-r from-[#63B3ED] to-[#9F7AEA] border-t-4 border-[#2D3748] text-white text-center relative overflow-hidden">
         <div className="absolute top-0 right-0 w-32 h-16 bg-white opacity-10 rounded-full blur-md"></div>
