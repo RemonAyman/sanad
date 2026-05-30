@@ -42,15 +42,33 @@ export default function TalentsPage() {
     setToast({ show: true, message, type });
   };
 
-  // Fetch approved talents
+  // Fetch approved talents (public) and include the current user's own talents
   const fetchApprovedTalents = async () => {
     try {
-      const talentsQuery = query(collection(db, "talents"));
-      const talentsSnapshot = await getDocs(talentsQuery);
+      // 1) Fetch only approved talents (required by security rules for unauthenticated/public users)
+      const approvedQuery = query(collection(db, "talents"), where("approved", "==", true));
+      const approvedSnapshot = await getDocs(approvedQuery);
       const fetchedTalents: any[] = [];
-      talentsSnapshot.forEach((docSnap) => {
+      approvedSnapshot.forEach((docSnap) => {
         fetchedTalents.push({ id: docSnap.id, ...docSnap.data() });
       });
+
+      // 2) If user is signed in, also fetch their own talents (including unapproved ones)
+      if (user && user.uid) {
+        try {
+          const ownerQuery = query(collection(db, "talents"), where("userId", "==", user.uid));
+          const ownerSnapshot = await getDocs(ownerQuery);
+          ownerSnapshot.forEach((docSnap) => {
+            const item = { id: docSnap.id, ...docSnap.data() };
+            // avoid duplicates
+            if (!fetchedTalents.find((t) => t.id === item.id)) {
+              fetchedTalents.push(item);
+            }
+          });
+        } catch (ownerErr) {
+          console.warn("Failed to fetch user's own talents (may be permission related):", ownerErr);
+        }
+      }
 
       fetchedTalents.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
       setTalents(fetchedTalents);
