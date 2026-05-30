@@ -251,6 +251,7 @@ export default function AdminDashboard() {
       setZoomLinks({ ...zoomLinks, [bookingId]: "" });
     } catch (err) {
       console.error(err);
+      showToast("فشل تحديث حالة الحجز. تأكد من أن حسابك مدير ولديك صلاحيات Firestore.", "error");
     }
   };
 
@@ -262,6 +263,7 @@ export default function AdminDashboard() {
       showToast("تم رفض اللقاء وتعديل الحالة ❌", "info");
     } catch (err) {
       console.error(err);
+      showToast("فشل رفض الحجز. تأكد من أن حسابك مدير ولديك صلاحيات Firestore.", "error");
     }
   };
 
@@ -355,6 +357,7 @@ export default function AdminDashboard() {
       showToast("تم حذف الفيديو من المكتبة بنجاح 🗑️", "success");
     } catch (err) {
       console.error(err);
+      showToast("فشل حذف الفيديو. تأكد من أن حسابك مدير ولديك صلاحيات Firestore.", "error");
     }
   };
 
@@ -367,6 +370,7 @@ export default function AdminDashboard() {
       showToast("تمت الموافقة بنجاح ونشر الموهبة في المعرض! 🎨🎉", "success");
     } catch (err) {
       console.error(err);
+      showToast("فشل الموافقة على الموهبة. تأكد من أن حسابك مدير ولديك صلاحيات Firestore.", "error");
     }
   };
 
@@ -376,6 +380,7 @@ export default function AdminDashboard() {
       showToast("تم حذف الموهبة المرفوعة نهائياً 🗑️", "success");
     } catch (err) {
       console.error(err);
+      showToast("فشل حذف الموهبة. تأكد من أن حسابك مدير ولديك صلاحيات Firestore.", "error");
     }
   };
 
