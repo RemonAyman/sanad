@@ -66,8 +66,6 @@ export const metadata: Metadata = {
     description: "مساحة أمان للأطفال للتحدث بحرية والحصول على دعم ضد التنمر والعنف",
     images: ["https://sanad.serveirc.com/twitter-image.png"],
   },
-  viewport: "width=device-width, initial-scale=1, maximum-scale=5",
-  themeColor: "#4F46E5",
   manifest: "/manifest.json",
 };
 
@@ -119,6 +117,8 @@ export default function RootLayout({
   return (
     <html lang="ar" dir="rtl" className="h-full">
       <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+        <meta name="theme-color" content="#4F46E5" />
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.json" />

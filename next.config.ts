@@ -52,10 +52,7 @@ const nextConfig: NextConfig = {
   },
 
   // Internationalization
-  i18n: {
-    locales: ['ar', 'en'],
-    defaultLocale: 'ar',
-  },
+  // Note: i18n is not supported with App Router. Handle locales via middleware or app routes.
 };
 
 export default nextConfig;
